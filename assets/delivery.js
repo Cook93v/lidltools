@@ -3,8 +3,7 @@
  * Logique métier écrite et adaptée pour MV.
  *
  * Rien n'est envoyé vers un serveur ici :
- * les saisies restent dans le navigateur via localStorage.
- * Ça permet de garder l'outil rapide et utilisable sans compte utilisateur.
+ * aucune saisie n'est conservée entre deux ouvertures de page.
  */
 
 // Types de livraison suivis dans le magasin.
@@ -103,23 +102,13 @@ const modal=document.querySelector('#modal');
 const toast=document.querySelector('#toast');
 const deliveryReportVisual=document.querySelector('#deliveryReportVisual');
 
-[...inputs,flPalettes,flHalfPalettes].forEach(x=>x.addEventListener('input',save));
-observations.addEventListener('input',save);
+// Aucune sauvegarde automatique : les valeurs restent uniquement le temps de la page.
 
-// Même principe côté livraison : on garde les valeurs dans le navigateur.
-function save(){
-  localStorage.setItem('lidlvm-delivery',JSON.stringify({
-    q:inputs.map(x=>x.value),
-    flPalettes:flPalettes.value,
-    flHalfPalettes:flHalfPalettes.value,
-    obs:observations.value
-  }))
-}
 
 // Recharge la dernière saisie connue au démarrage.
 function restore(){
   try{
-    const s=JSON.parse(localStorage.getItem('lidlvm-delivery'));
+    const s=null;
     if(!s)return;
     inputs.forEach((x,i)=>x.value=s.q?.[i]||'');
     flPalettes.value=s.flPalettes||'';
@@ -339,7 +328,7 @@ downloadReport.onclick=async()=>{
 
 // Remise à zéro complète du formulaire et du stockage local.
 reset.onclick=()=>{
-  localStorage.removeItem('lidlvm-delivery');
+  
   inputs.forEach(x=>x.value='');
   flPalettes.value='';
   flHalfPalettes.value='';
@@ -347,4 +336,3 @@ reset.onclick=()=>{
   showToast('Formulaire réinitialisé')
 };
 
-restore();
