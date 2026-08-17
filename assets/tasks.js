@@ -3,8 +3,7 @@
  * Logique métier écrite et adaptée pour MV.
  *
  * Rien n'est envoyé vers un serveur ici :
- * les saisies restent dans le navigateur via localStorage.
- * Ça permet de garder l'outil rapide et utilisable sans compte utilisateur.
+ * aucune saisie n'est conservée entre deux ouvertures de page.
  */
 
 // Liste des tâches utilisées dans le bilan quotidien.
@@ -38,12 +37,10 @@ const body=document.querySelector('#tasksBody'),lex=document.querySelector('#lex
 // Statuts volontairement limités : il faut pouvoir répondre vite sans réfléchir à 15 choix.
 const options='<option value="">— Choisir —</option><option>✅ Fait</option><option>⏳ À faire</option><option>⚠️ Partiel</option><option>❌ Non fait</option><option>➖ Non concerné</option>';
 tasks.forEach(([name,desc],i)=>{const tr=document.createElement('tr'); const coffre=name.includes('coffre'); tr.innerHTML=`<td class="task-name"><span class="task-label">${name}</span><small class="task-help">${desc}</small></td><td>${coffre?`<div class="coffre-wrap"><select class="status-select" data-index="${i}">${options}<option>❗ Erreur</option></select><input class="text-input coffre-error" data-coffre="${i}" placeholder="Saisir la valeur si erreur"></div>`:`<select class="status-select" data-index="${i}">${options}</select>`}</td>`;body.appendChild(tr);const d=document.createElement('div');d.innerHTML=`<dt>${name.replace(/^\S+\s/,'')} :</dt> <dd>${desc}</dd>`;if(lex) lex.appendChild(d)});
-document.querySelectorAll('.status-select').forEach(s=>s.addEventListener('change',e=>{const inp=document.querySelector(`[data-coffre="${e.target.dataset.index}"]`);if(inp)inp.classList.toggle('show',e.target.value.includes('Erreur'));saveState()}));
-document.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',saveState));
-// Sauvegarde locale : évite de perdre une saisie si la page est fermée par erreur.
-function saveState(){const statuses=[...document.querySelectorAll('.status-select')].map(x=>x.value);localStorage.setItem('lidlvm-tasks',JSON.stringify({statuses,obs:observations.value,coffre:document.querySelector('[data-coffre]')?.value||''}))}
+document.querySelectorAll('.status-select').forEach(s=>s.addEventListener('change',e=>{const inp=document.querySelector(`[data-coffre="${e.target.dataset.index}"]`);if(inp)inp.classList.toggle('show',e.target.value.includes('Erreur'))}));
+// Pas de sauvegarde automatique : les champs repartent vides à chaque ouverture.
 // Recharge la dernière saisie connue au démarrage.
-function restore(){try{const s=JSON.parse(localStorage.getItem('lidlvm-tasks'));if(!s)return;document.querySelectorAll('.status-select').forEach((x,i)=>x.value=s.statuses?.[i]||'');observations.value=s.obs||'';const c=document.querySelector('[data-coffre]');if(c){c.value=s.coffre||'';c.classList.toggle('show',document.querySelector('.status-select[data-index="20"]')?.value.includes('Erreur'))}}catch{}}
+function restore(){try{const s=null;if(!s)return;document.querySelectorAll('.status-select').forEach((x,i)=>x.value=s.statuses?.[i]||'');observations.value=s.obs||'';const c=document.querySelector('[data-coffre]');if(c){c.value=s.coffre||'';c.classList.toggle('show',document.querySelector('.status-select[data-index="20"]')?.value.includes('Erreur'))}}catch{}}
 // Version texte du compte-rendu, utile pour copier/coller dans un message.
 function report(){
   const date=new Intl.DateTimeFormat('fr-FR',{dateStyle:'full'}).format(new Date());
@@ -105,6 +102,15 @@ function renderReport(){
     na:filled.filter(x=>x.info.cls==='na')
   };
 
+  const sectionLabels={
+    done:'RÉALISÉ',
+    todo:'À FAIRE',
+    partial:'PARTIEL',
+    notdone:'NON RÉALISÉ',
+    error:'ANOMALIE',
+    na:'NON CONCERNÉ'
+  };
+
   const sections=[
     {key:'done',title:'Tâches réalisées',icon:'✓'},
     {key:'todo',title:'À faire',icon:'○'},
@@ -130,7 +136,7 @@ function renderReport(){
 
     return `<section class="bilan-status-section">
       <div class="bilan-status-head">
-        <div><span>${section.key.toUpperCase()}</span><strong>${section.icon} ${section.title}</strong></div>
+        <div><span>${sectionLabels[section.key]}</span><strong>${section.icon} ${section.title}</strong></div>
         <b>${groups[section.key].length}</b>
       </div>
       <div>${rows}</div>
@@ -208,5 +214,5 @@ downloadReport.onclick=async()=>{
   showToast('Compte-rendu PNG sauvegardé')
 };
 // Remise à zéro complète du formulaire et du stockage local.
-reset.onclick=()=>{localStorage.removeItem('lidlvm-tasks');document.querySelectorAll('.status-select').forEach(x=>x.value='');document.querySelectorAll('input,textarea').forEach(x=>x.value='');document.querySelectorAll('.coffre-error').forEach(x=>x.classList.remove('show'));showToast('Formulaire réinitialisé')};
-savePng.onclick=async()=>{if(typeof html2canvas==='undefined'){showToast('Impossible de charger l’export PNG');return}const canvas=await html2canvas(document.querySelector('#captureArea'),{scale:2,backgroundColor:'#f3f6fa'});const a=document.createElement('a');a.download=`bilan-taches-${new Date().toISOString().slice(0,10)}.png`;a.href=canvas.toDataURL('image/png');a.click();showToast('PNG sauvegardé')};restore();
+reset.onclick=()=>{document.querySelectorAll('.status-select').forEach(x=>x.value='');document.querySelectorAll('input,textarea').forEach(x=>x.value='');document.querySelectorAll('.coffre-error').forEach(x=>x.classList.remove('show'));showToast('Formulaire réinitialisé')};
+savePng.onclick=async()=>{if(typeof html2canvas==='undefined'){showToast('Impossible de charger l’export PNG');return}const canvas=await html2canvas(document.querySelector('#captureArea'),{scale:2,backgroundColor:'#f3f6fa'});const a=document.createElement('a');a.download=`bilan-taches-${new Date().toISOString().slice(0,10)}.png`;a.href=canvas.toDataURL('image/png');a.click();showToast('PNG sauvegardé')};
