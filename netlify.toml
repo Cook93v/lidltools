@@ -1,3 +1,8 @@
+# LidlVM — configuration Netlify
+# Projet maintenu par MV.
+# Les redirections ci-dessous permettent de garder des URLs propres
+# tout en servant les fichiers HTML statiques.
+
 [[redirects]]
   from = "/index1"
   to = "/index1.html"
