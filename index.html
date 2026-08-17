@@ -1,33 +1,107 @@
+<!--
+  LidlVM
+  Fichier : index.html
+  Développement / maintenance : MV
+
+  Notes :
+  - interface pensée pour une utilisation rapide en magasin
+  - garder les blocs simples à modifier si les besoins évoluent
+  - éviter de charger la page avec des dépendances inutiles
+-->
+
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0050aa">
-  <title>Lidl | Espace Employés</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <!-- Métadonnées de base et styles globaux -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LidlVM — Espace Employés</title>
+<style>
+:root{--blue:#0050aa;--blue2:#0d64d8;--blue3:#003b7e;--yellow:#ffdf00;--red:#e30613;--ink:#102033;--muted:#728198;--line:#dce6f0}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);background:
+radial-gradient(circle at 15% 12%,rgba(0,80,170,.10),transparent 30%),
+radial-gradient(circle at 85% 10%,rgba(255,223,0,.16),transparent 24%),
+linear-gradient(180deg,#f6faff 0%,#edf4fb 52%,#f8fbff 100%);min-height:100vh}
+.page{width:min(1180px,calc(100% - 36px));margin:auto;padding:24px 0 42px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px;padding:14px 16px;border:1px solid rgba(255,255,255,.85);background:rgba(255,255,255,.76);backdrop-filter:blur(18px);border-radius:22px;box-shadow:0 10px 30px rgba(28,63,102,.08)}
+.brand{display:flex;align-items:center;gap:12px}.logo-img{width:58px;height:58px;object-fit:contain;border-radius:14px;display:block;box-shadow:0 8px 20px rgba(0,80,170,.18)}.brand-copy strong{display:block}.brand-copy small{display:block;color:var(--muted);margin-top:2px}
+.top-actions{display:flex;gap:10px}.pill{height:38px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;gap:8px;color:#526176;font-size:13px;font-weight:600}.dot{width:8px;height:8px;border-radius:50%;background:#33b36b;box-shadow:0 0 0 4px rgba(51,179,107,.12)}
+.hero{position:relative;overflow:hidden;border-radius:34px;padding:46px;min-height:430px;background:linear-gradient(135deg,#003b7e,#0050aa 48%,#0d64d8);box-shadow:0 30px 70px rgba(22,54,94,.14);color:#fff}
+.hero:before{content:"";position:absolute;width:430px;height:430px;right:-120px;top:-170px;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,223,0,.75),rgba(255,223,0,.08) 52%,transparent 70%)}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:end}.kicker{display:inline-flex;padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px}
+.hero h1{font-size:72px;line-height:.95;letter-spacing:-.045em;margin:0}.hero h1 span{display:block;color:var(--yellow)}.hero p{font-size:17px;line-height:1.7;max-width:640px;color:rgba(255,255,255,.78);margin:20px 0 0}
+.hero-side{display:flex;flex-direction:column;gap:14px}.mini{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:22px;padding:18px}.mini small{font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.58)}.mini b{display:block;font-size:24px;margin-top:7px}.mini span{display:block;margin-top:4px;font-size:12px;color:rgba(255,255,255,.66)}
+.content{margin-top:-72px;position:relative;z-index:2;padding:0 26px}.primary-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.action-card{display:flex;align-items:center;gap:18px;padding:24px;text-decoration:none;color:var(--ink);background:rgba(255,255,255,.86);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.95);border-radius:26px;box-shadow:0 18px 44px rgba(31,63,101,.10);transition:.22s}.action-card:hover{transform:translateY(-5px);box-shadow:0 24px 54px rgba(31,63,101,.16)}.icon-box{width:62px;height:62px;flex:0 0 62px;border-radius:20px;display:grid;place-items:center;font-size:28px;background:linear-gradient(145deg,#edf5ff,#fff);border:1px solid #d9e8f7}.action-copy{flex:1}.action-copy small{display:block;color:var(--blue);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.10em;margin-bottom:6px}.action-copy strong{display:block;font-size:20px}.action-copy span{display:block;color:var(--muted);font-size:13px;margin-top:6px}.arrow{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:#eef5fc;color:var(--blue);font-size:20px;font-weight:800}
+.secondary{margin-top:22px;display:grid;grid-template-columns:1.35fr .65fr;gap:18px}.panel{background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.95);border-radius:26px;padding:24px;box-shadow:0 14px 36px rgba(31,63,101,.07)}.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.section-title h2{font-size:16px;margin:0}.section-title span{font-size:12px;color:var(--muted)}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.quick{border:1px solid #e4edf6;background:#f8fbff;border-radius:18px;padding:15px}.quick-icon{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:#eaf3fc;color:var(--blue)}.quick b{display:block;font-size:24px;margin-top:10px}.quick small{color:var(--muted);font-size:12px}.yellow{background:linear-gradient(145deg,#ffdf00,#ffef7c);border-color:#ffdf00}.yellow .label{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#7d6800}.yellow h3{font-size:24px;line-height:1.15;margin:12px 0 6px}.yellow p{margin:0;color:#6b5c15;font-size:13px;line-height:1.55}.footer{text-align:center;color:#7b899c;font-size:12px;padding:26px 0 0}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.hero h1{font-size:54px}.primary-grid,.secondary{grid-template-columns:1fr}.content{margin-top:18px;padding:0}.hero{padding:32px 24px}.top-actions .date{display:none}.quick-grid{grid-template-columns:1fr}}
+</style>
 </head>
-<body class="home-body">
-  <main class="home-shell">
-    <section class="hero-card">
-      <div class="brand-mark" aria-label="Lidl">L<span>i</span>DL</div>
-      <p class="eyebrow">PORTAIL INTERNE</p>
-      <h1>Espace Employés</h1>
-      <p class="lead">Accès rapide aux outils internes et au suivi quotidien.</p>
-      <div class="tool-grid">
-        <a class="tool-card" href="index1.html">
-          <span class="tool-icon">📝</span>
-          <span><strong>Bilan des tâches du jour</strong><small>Organisation</small></span>
-          <span class="arrow">→</span>
+<!-- Début de l'interface visible -->
+<body>
+<div class="page">
+<!-- Barre haute : identité du portail + retour accueil -->
+<header class="topbar">
+  <div class="brand"><img class="lidl-remote-logo" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Lidl-Logo.svg" alt="Lidl"><div class="brand-copy"><strong>LidlVM</strong><small>Portail interne magasin</small></div></div>
+  <div class="top-actions"><div class="pill"><span class="dot"></span>Système opérationnel</div><div class="pill date">Dimanche 16 août 2026</div></div>
+</header>
+
+<section class="hero">
+ <div class="hero-grid">
+  <div>
+   <div class="kicker">Espace employés</div>
+   <h1>Votre journée,<span>en un coup d’œil.</span></h1>
+   <p>Accédez rapidement aux outils essentiels du magasin avec une interface plus claire, moderne et pensée pour un usage quotidien.</p>
+  </div>
+  <div class="hero-side">
+   <div class="mini"><small>Accès principal</small><b>2 outils</b><span>Organisation & réception</span></div>
+   <div class="mini"><small>Interface</small><b>Responsive</b><span>Optimisée ordinateur & mobile</span></div>
+  </div>
+ </div>
+</section>
+
+<!-- Contenu principal de la page -->
+<main class="content">
+ <div class="primary-grid">
+  <a class="action-card" href="index1.html"><div class="icon-box">📝</div><div class="action-copy"><small>Organisation</small><strong>Bilan des tâches du jour</strong><span>Suivi des missions, état d’avancement et compte-rendu.</span></div><div class="arrow">→</div></a>
+  <a class="action-card" href="livraison.html"><div class="icon-box">🚚</div><div class="action-copy"><small>Réception</small><strong>Livraison du jour</strong><span>Préparation, suivi et organisation de la réception.</span></div><div class="arrow">→</div></a>
+ 
+        <!-- Accès RH MyLidl — ajouté par MV -->
+        <a class="action-card" href="https://mylidl.lidl.com/sap/bc/ui5_ui5/ui2/ushell/shells/abap/Fiorilaunchpad.html?sov-ui-flp=true#ZHRX_SO_ESS_LR-display" target="_blank" rel="noopener noreferrer">
+          <div class="icon-box">🏖️</div>
+          <div class="action-copy">
+            <small>Ressources humaines</small>
+            <strong>Demande d'absence</strong>
+            <span>Accéder à MyLidl pour effectuer une demande d'absence.</span>
+          </div>
+          <div class="arrow">↗</div>
         </a>
-        <a class="tool-card" href="livraison.html">
-          <span class="tool-icon">🚚</span>
-          <span><strong>Livraison du jour</strong><small>Réception</small></span>
-          <span class="arrow">→</span>
+      
+        <!-- Accès RH MyLidl — temps de travail, ajouté par MV -->
+        <a class="action-card" href="https://mylidl.lidl.com/sap/bc/ui5_ui5/ui2/ushell/shells/abap/Fiorilaunchpad.html?sov-ui-flp=true#ZHRX_SO_ESS_TC-display&/activeData/list" target="_blank" rel="noopener noreferrer">
+          <div class="icon-box">⏱️</div>
+          <div class="action-copy">
+            <small>Ressources humaines</small>
+            <strong>Temps de travail</strong>
+            <span>Accéder à MyLidl pour consulter le suivi du temps de travail.</span>
+          </div>
+          <div class="arrow">↗</div>
         </a>
       </div>
-    </section>
-    <footer>© Lidl — Accès réservé au personnel</footer>
-  </main>
-</body>
-</html>
+
+      <section class="secondary">
+  <div class="panel">
+   <div class="section-title"><h2>Accès rapide</h2><span>Outils du quotidien</span></div>
+   <div class="quick-grid">
+    <div class="quick"><div class="quick-icon">✓</div><b>Simple</b><small>Accès immédiat aux outils utiles.</small></div>
+    <div class="quick"><div class="quick-icon">⚡</div><b>Rapide</b><small>Navigation directe sans surcharge visuelle.</small></div>
+    <div class="quick"><div class="quick-icon">📱</div><b>Mobile</b><small>Confortable aussi depuis un téléphone.</small></div>
+   </div>
+  </div>
+  <aside class="panel yellow"><div class="label">ESPACE EMPLOYÉS</div><h3>Tout ce dont vous avez besoin, au même endroit.</h3><p>Accédez aux outils essentiels du magasin rapidement depuis votre ordinateur ou votre téléphone.</p></aside>
+ </section>
+</main>
+<!-- Pied de page volontairement discret -->
+<footer class="footer">© LidlVM — Accès réservé au personnel</footer>
+</div>
+</body></html>
