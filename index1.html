@@ -1,16 +1,49 @@
+<!--
+  LidlVM
+  Fichier : index1.html
+  Développement / maintenance : MV
+
+  Notes :
+  - interface pensée pour une utilisation rapide en magasin
+  - garder les blocs simples à modifier si les besoins évoluent
+  - éviter de charger la page avec des dépendances inutiles
+-->
+
 <!doctype html>
 <html lang="fr">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0050aa"><title>Bilan des Tâches du Jour | Lidl</title><link rel="stylesheet" href="assets/style.css"></head>
+<head>
+  <!-- Métadonnées de base et styles globaux --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0050aa"><title>Bilan des Tâches du Jour | Lidl</title><link rel="stylesheet" href="assets/style.css"></head>
+<!-- Début de l'interface visible -->
 <body class="app-body">
-<header class="topbar"><div class="topbar-inner"><div class="mini-logo">LIDL</div><div class="topbar-title">Espace Employés<small>Organisation quotidienne</small></div><a class="back-link" href="index.html">← Accueil</a></div></header>
+<!-- Barre haute : identité du portail + retour accueil -->
+<header class="topbar"><div class="topbar-inner"><img class="lidl-remote-logo" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Lidl-Logo.svg" alt="Lidl"><div class="topbar-title">Espace Employés<small>Organisation quotidienne</small></div><a class="back-link" href="index.html">← Accueil</a></div></header>
+<!-- Contenu principal de la page -->
 <main class="container" id="captureArea">
   <div class="page-heading"><h1>📋 Bilan des Tâches du Jour</h1><p>Renseignez le statut des tâches puis générez le compte-rendu.</p></div>
-  <section class="panel">
+  <!-- Bloc fonctionnel : gardé indépendant pour faciliter les évolutions -->
+<section class="panel">
     <table class="task-table"><thead><tr><th>Tâche</th><th>Statut</th></tr></thead><tbody id="tasksBody"></tbody></table>
   </section>
-  <section class="panel lexique"><h2>📘 Lexique des tâches</h2><dl class="lexique-grid" id="lexique"></dl></section>
   <section class="panel obs"><h2>🔎 Observations :</h2><textarea id="observations" placeholder="Ajouter une observation…"></textarea><div class="actions"><button class="btn btn-primary" id="generate">📄 Générer le compte-rendu</button><button class="btn btn-success" id="savePng">✅ Valider et sauvegarder PNG</button><button class="btn btn-secondary" id="reset">Réinitialiser</button></div></section>
 </main>
-<div class="report-modal" id="modal"><div class="report-box"><h2>Compte-rendu</h2><pre id="reportText"></pre><div class="report-actions"><button class="btn btn-secondary" id="closeModal">Fermer</button><button class="btn btn-primary" id="copyReport">Copier</button></div></div></div><div class="toast" id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><script src="assets/tasks.js"></script>
+<!-- Fenêtre de compte-rendu générée côté navigateur -->
+<div class="report-modal" id="modal">
+  <div class="report-box">
+    <div class="report-top">
+      <div class="report-brand">
+        <img class="lidl-remote-logo" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Lidl-Logo.svg" alt="Lidl">
+        <div><span>SUIVI QUOTIDIEN</span><strong>Compte-rendu bilan du jour</strong></div>
+      </div>
+      <button class="report-close" id="closeModal" aria-label="Fermer">×</button>
+    </div>
+    <div id="reportVisual"></div>
+    <div class="report-actions">
+      <button class="btn btn-secondary" id="copyReport">📋 Copier le texte</button>
+      <button class="btn btn-primary" id="downloadReport">⬇ Enregistrer en PNG</button>
+    </div>
+  </div>
+</div><!-- Petit message de confirmation après une action -->
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><!-- Scripts métier de la page -->
+<script src="assets/tasks.js"></script>
 </body></html>
