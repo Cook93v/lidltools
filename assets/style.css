@@ -909,3 +909,36 @@
 @media(max-width:700px){
   .primary-grid{grid-template-columns:1fr !important}
 }
+
+/*
+ * Logo Lidl directement intégré dans le HTML.
+ * Pas de fichier image à maintenir.
+ * Projet LidlVM — MV
+ */
+.lidl-inline-logo{display:block;width:58px;height:58px;flex:0 0 58px}
+.topbar .lidl-inline-logo{width:44px;height:44px;flex-basis:44px}
+.report-brand .lidl-inline-logo{width:43px;height:43px;flex-basis:43px}
+
+
+/*
+ * Logo Lidl officiel chargé depuis Wikimedia.
+ * Aucun fichier image n'est stocké dans le projet.
+ * Projet LidlVM — MV
+ */
+.lidl-remote-logo{
+  display:block;
+  width:58px;
+  height:58px;
+  object-fit:contain;
+  flex:0 0 58px;
+}
+.topbar .lidl-remote-logo{
+  width:44px;
+  height:44px;
+  flex-basis:44px;
+}
+.report-brand .lidl-remote-logo{
+  width:43px;
+  height:43px;
+  flex-basis:43px;
+}
