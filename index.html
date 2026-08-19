@@ -42,8 +42,8 @@ linear-gradient(180deg,#f6faff 0%,#edf4fb 52%,#f8fbff 100%);min-height:100vh}
 <div class="page">
 <!-- Barre haute : identité du portail + retour accueil -->
 <header class="topbar">
-  <div class="brand"><img class="lidl-remote-logo" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Lidl-Logo.svg" alt="Lidl"><div class="brand-copy"><strong>LidlVM</strong><small>Portail interne magasin</small></div></div>
-  <div class="top-actions"><div class="pill"><span class="dot"></span>Système opérationnel</div><div class="pill date">Dimanche 16 août 2026</div></div>
+  <div class="brand"><img class="logo-img" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Lidl-Logo.svg" alt="Lidl"><div class="brand-copy"><strong>LidlVM</strong><small>Portail interne magasin</small></div></div>
+  <div class="top-actions"><div class="pill"><span class="dot"></span>Système opérationnel</div><div class="pill date" id="currentDate">Date du jour</div></div>
 </header>
 
 <section class="hero">
@@ -54,7 +54,7 @@ linear-gradient(180deg,#f6faff 0%,#edf4fb 52%,#f8fbff 100%);min-height:100vh}
    <p>Accédez rapidement aux outils essentiels du magasin avec une interface plus claire, moderne et pensée pour un usage quotidien.</p>
   </div>
   <div class="hero-side">
-   <div class="mini"><small>Accès principal</small><b>2 outils</b><span>Organisation & réception</span></div>
+   <div class="mini"><small>Accès principal</small><b>4 outils</b><span>Organisation, réception & RH</span></div>
    <div class="mini"><small>Interface</small><b>Responsive</b><span>Optimisée ordinateur & mobile</span></div>
   </div>
  </div>
@@ -104,4 +104,14 @@ linear-gradient(180deg,#f6faff 0%,#edf4fb 52%,#f8fbff 100%);min-height:100vh}
 <!-- Pied de page volontairement discret -->
 <footer class="footer">© LidlVM — Accès réservé au personnel</footer>
 </div>
+<script>
+  (() => {
+    const dateNode = document.querySelector('#currentDate');
+    if (!dateNode) return;
+    const label = new Intl.DateTimeFormat('fr-FR', {
+      weekday:'long', day:'numeric', month:'long', year:'numeric'
+    }).format(new Date());
+    dateNode.textContent = label.charAt(0).toUpperCase() + label.slice(1);
+  })();
+</script>
 </body></html>
