@@ -942,3 +942,79 @@
   height:43px;
   flex-basis:43px;
 }
+
+/* =========================================================
+   Corrections de stabilité — août 2026
+   ========================================================= */
+
+/* Le bloc exporté inclut désormais l'identité Lidl et le compte-rendu,
+   mais jamais les boutons d'action de la fenêtre. */
+.report-export-area{
+  background:#f4f7fb;
+  overflow:hidden
+}
+.report-export-area .report-top{
+  position:relative;
+  top:auto
+}
+
+/* Teintes par catégorie : elles remplacent les anciens nth-child afin que
+   l'ordre des champs n'influence plus la couleur d'une famille. */
+.cat-sec .delivery-field-card{border-color:#dce6f0;background:linear-gradient(145deg,#f8fbff,#f4f8fc)}
+.cat-sec .delivery-field-icon{background:#eaf3fc}
+.cat-frais .delivery-field-card{border-color:#dceadf;background:linear-gradient(145deg,#f8fdf9,#f3faf5)}
+.cat-frais .delivery-field-icon{background:#e8f6ed}
+.cat-surg .delivery-field-card{border-color:#d7e7f7;background:linear-gradient(145deg,#f7fbff,#f0f7ff)}
+.cat-surg .delivery-field-icon{background:#e2f1ff}
+.cat-vvp .delivery-field-card{border-color:#f0dddd;background:linear-gradient(145deg,#fff9f9,#fff3f3)}
+.cat-vvp .delivery-field-icon{background:#fde9e9}
+.cat-action .delivery-field-card{border-color:#eee5cb;background:linear-gradient(145deg,#fffdf6,#fffaf0)}
+.cat-action .delivery-field-icon{background:#fff3cc}
+.cat-nonfood .delivery-field-card{border-color:#eee2c8;background:linear-gradient(145deg,#fffaf1,#fffdf8)}
+.cat-nonfood .delivery-field-icon{background:#fff2d7}
+.cat-box .delivery-field-card{border-color:#dedff0;background:linear-gradient(145deg,#fafaff,#f6f7ff)}
+.cat-box .delivery-field-icon{background:#eceefe}
+.cat-masse .delivery-field-card{border-color:#e4dcf3;background:linear-gradient(145deg,#faf8ff,#f6f2ff)}
+.cat-masse .delivery-field-icon{background:#eee8fb}
+
+/* Une valeur 0 explicitement saisie reste visible, mais discrète. */
+.delivery-detail-row.is-zero{opacity:.68}
+
+/* Format d'export constant, même lorsque l'utilisateur est sur mobile.
+   html2canvas ajoute temporairement la classe export-capture. */
+.report-export-area.export-capture{
+  width:860px!important;
+  max-width:none!important
+}
+.report-export-area.export-capture #deliveryReportVisual,
+.report-export-area.export-capture #reportVisual{
+  padding:22px!important
+}
+.report-export-area.export-capture .delivery-family-blocks-v4,
+.report-export-area.export-capture .delivery-family-blocks,
+.report-export-area.export-capture .bilan-status-sections{
+  grid-template-columns:1fr 1fr!important
+}
+.report-export-area.export-capture .delivery-report-signoff{
+  flex-direction:row!important
+}
+.report-export-area.export-capture .delivery-report-cover{
+  padding:28px 30px!important;
+  border-radius:24px!important
+}
+.report-export-area.export-capture .delivery-report-cover h2{
+  font-size:31px!important
+}
+.report-export-area.export-capture .delivery-cover-badge{
+  min-width:150px!important;
+  padding:14px 18px!important
+}
+.report-export-area.export-capture .delivery-cover-badge strong{
+  font-size:26px!important
+}
+
+.qty-input:invalid,
+.delivery-field-input:invalid{
+  border-color:#d84646!important;
+  box-shadow:0 0 0 3px rgba(216,70,70,.10)
+}
