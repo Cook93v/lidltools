@@ -29,14 +29,16 @@
 <!-- Fenêtre de compte-rendu générée côté navigateur -->
 <div class="report-modal" id="modal">
   <div class="report-box">
-    <div class="report-top">
-      <div class="report-brand">
-        <img class="lidl-remote-logo" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Lidl-Logo.svg" alt="Lidl">
-        <div><span>SUIVI QUOTIDIEN</span><strong>Compte-rendu bilan du jour</strong></div>
+    <div id="bilanExportArea" class="report-export-area">
+      <div class="report-top">
+        <div class="report-brand">
+          <img class="lidl-remote-logo" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Lidl-Logo.svg" alt="Lidl" crossorigin="anonymous">
+          <div><span>SUIVI QUOTIDIEN</span><strong>Compte-rendu bilan du jour</strong></div>
+        </div>
+        <button class="report-close" id="closeModal" aria-label="Fermer" data-html2canvas-ignore="true">×</button>
       </div>
-      <button class="report-close" id="closeModal" aria-label="Fermer">×</button>
+      <div id="reportVisual"></div>
     </div>
-    <div id="reportVisual"></div>
     <div class="report-actions">
       <button class="btn btn-secondary" id="copyReport">📋 Copier le texte</button>
       <button class="btn btn-primary" id="downloadReport">⬇ Enregistrer en PNG</button>
@@ -44,6 +46,8 @@
   </div>
 </div><!-- Petit message de confirmation après une action -->
 <div class="toast" id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><!-- Scripts métier de la page -->
+<!-- Scripts métier de la page -->
+
+<!-- Le script métier est chargé en premier : les sélections restent disponibles même si le CDN PNG est indisponible. -->
 <script src="assets/tasks.js"></script>
 </body></html>
