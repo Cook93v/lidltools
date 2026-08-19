@@ -1,15 +1,29 @@
-# Notes développeur — LidlVM
+[CODE_NOTES.md](https://github.com/user-attachments/files/31216614/CODE_NOTES.md)
+# Notes techniques — LidlVM
 
-Créateur du projet : **MV**
+## Données
 
-Quelques choix faits volontairement dans le projet :
+Aucun `localStorage` n'est utilisé. Les valeurs saisies existent uniquement tant
+que la page reste ouverte.
 
-- pas de framework lourd pour garder un chargement rapide ;
-- stockage local pour les formulaires et les brouillons ;
-- génération des comptes-rendus directement dans le navigateur ;
-- CSS regroupé dans un fichier principal pour pouvoir corriger rapidement l'apparence ;
-- JavaScript séparé entre le bilan et la livraison afin d'éviter de mélanger les deux logiques métier.
+## Livraison
 
-Les commentaires dans les fichiers sont là pour faciliter les futures modifications, pas pour documenter chaque ligne.
+Les champs représentent des nombres d'unités : palettes, demi-palettes, Box ou
+TKT. Ils utilisent donc un pas entier (`step=1`) et refusent les valeurs
+négatives.
 
-- Ajout d'un accès direct **Demande d'absence** vers MyLidl (RH), ouverture dans un nouvel onglet.
+Le compte-rendu n'additionne pas des unités différentes. Chaque catégorie
+indique seulement le nombre de lignes renseignées et affiche les quantités
+exactes saisies.
+
+## PNG
+
+Les zones `deliveryExportArea` et `bilanExportArea` regroupent l'en-tête avec le
+logo et le contenu du rapport. Les boutons de fermeture/action ne sont pas
+capturés. L'export applique temporairement une largeur fixe afin d'obtenir un
+rendu constant sur ordinateur et mobile.
+
+## Bilan
+
+L'index de la tâche « Édition coffre » est recherché dynamiquement. Ajouter une
+tâche avant elle ne casse donc plus la gestion du champ d'erreur coffre.
